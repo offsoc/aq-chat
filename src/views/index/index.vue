@@ -6,7 +6,7 @@
  * @Description: 首页
 -->
 <template>
-  <div class="main">
+  <div class="main transition-effect">
     <div class="chat-lottie">
       <lottie-ani :src="LottieChat" />
     </div>

@@ -6,7 +6,7 @@
  * @Description: 
 -->
 <template>
-  <div class="im-container">
+  <div class="im-container transition-effect">
     <el-tooltip class="item" :effect="appStore.theme === 'dark' ? 'light':'dark'" content="有空再聊，再见" placement="bottom-start">
       <i @click="quitFun" class="iconfont icon-enter"></i>
     </el-tooltip>
@@ -34,8 +34,8 @@
     <div class="content">
       <im-nav />
       <div class="content-info">
-        <im-domain v-if="!appStore.roomInfo.roomId" />
-        <im-content v-else />
+        <im-domain v-if="!appStore.roomInfo.roomId" class="transition-effect" />
+        <im-content v-else class="transition-effect" />
       </div>
     </div>
   </div>
