@@ -119,7 +119,7 @@ defineExpose({
   position: relative;
   width: 100%;
   height: 70%;
-  border: 1px solid rgba(204,204,204,.5);
+  border: 1px solid @member-boder;
   border-radius: 10px;
   overflow: hidden;
   .editor {
