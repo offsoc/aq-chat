@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer transition-effect">
     <!--工具栏-->
     <div class="foot-top">
       <ul>
@@ -287,9 +287,10 @@ defineExpose({changeExpression,rewriteFun})
   height: 30%;
   padding: 0 20px;
   width: 100%;
-  background-color: #fff;
+  // background-color: #fff;
+  background: @im-content-bg2;
   position: relative;
-  border-top: 1px solid rgba(204,204,204,.3);
+  border-top: 1px solid @member-boder;
   .foot-top {
     width: 100%;
     height: 25%;

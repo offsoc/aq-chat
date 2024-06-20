@@ -1,5 +1,5 @@
 <template>
-  <div class="im-content">
+  <div class="im-content transition-effect">
     <header class="head transition-effect">
       <span class="name">房间名：{{ appStore.roomInfo.roomName }}</span>
       <span class="room-no">房间号：

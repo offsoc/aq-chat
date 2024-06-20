@@ -31,10 +31,10 @@
     <audio id="tipMusic">
       <source src="/mp3/msgTip.mp3" type="audio/mp3" />
     </audio>
-    <div class="content">
+    <div class="content transition-effect">
       <im-nav />
       <div class="content-info">
-        <im-domain v-if="!appStore.roomInfo.roomId" class="transition-effect" />
+        <im-domain v-if="!appStore.roomInfo.roomId" />
         <im-content v-else class="transition-effect" />
       </div>
     </div>
