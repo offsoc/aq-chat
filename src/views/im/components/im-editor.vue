@@ -128,6 +128,9 @@ defineExpose({
     .input-editor{
       height: 100%;
       overflow-y: auto;
+      /deep/ .chat-rich-text {
+        color: @im-head-txt;
+      }
     }
   }
   /deep/ .chat-rich-text{

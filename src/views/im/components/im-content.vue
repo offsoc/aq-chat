@@ -1,6 +1,6 @@
 <template>
-  <div class="im-content">
-    <header class="head">
+  <div class="im-content transition-effect">
+    <header class="head transition-effect">
       <span class="name">房间名：{{ appStore.roomInfo.roomName }}</span>
       <span class="room-no">房间号：
         <span id="roomNo" @click="copyRoomNo" title="复制">{{ appStore.roomInfo.roomNo }}</span>

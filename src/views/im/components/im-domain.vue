@@ -1,5 +1,5 @@
 <template>
-  <div class="im-domain">
+  <div class="im-domain transition-effect">
     <div class="option-list">
       <div class="option" @click="createRoomFun">
         <i class="iconfont icon-create"></i>

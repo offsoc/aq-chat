@@ -6,7 +6,7 @@
  * @Description: 
 -->
 <template>
-  <div class="im-container">
+  <div class="im-container transition-effect">
     <el-tooltip class="item" :effect="appStore.theme === 'dark' ? 'light':'dark'" content="有空再聊，再见" placement="bottom-start">
       <i @click="quitFun" class="iconfont icon-enter"></i>
     </el-tooltip>
@@ -31,11 +31,11 @@
     <audio id="tipMusic">
       <source src="/mp3/msgTip.mp3" type="audio/mp3" />
     </audio>
-    <div class="content">
+    <div class="content transition-effect">
       <im-nav />
       <div class="content-info">
         <im-domain v-if="!appStore.roomInfo.roomId" />
-        <im-content v-else />
+        <im-content v-else class="transition-effect" />
       </div>
     </div>
   </div>
