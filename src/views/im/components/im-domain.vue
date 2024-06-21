@@ -319,7 +319,7 @@ const enterRoomFun = async ()=>{
         position: relative;
         display: flex;
         align-items: center;
-        color: @txt-color;
+        color: var(--txt-color);
         margin-top: 40px;
         margin-bottom:0;
         width: 100%;
@@ -361,9 +361,7 @@ const enterRoomFun = async ()=>{
   // border-bottom-right-radius: 30px;
   // border-top-right-radius: 30px;
   border-radius: 30px;
-  background: @im-list-bg;
-  // box-shadow: inset 5px 5px 4px @im-content-shadow1,
-  //             inset -5px -5px 4px @im-content-shadow2;
+  background: var(--im-list-bg);
   display:flex;
   flex-direction: column-reverse;
   align-items: end;

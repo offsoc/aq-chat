@@ -289,7 +289,7 @@ setTimeout(() => {
         position: relative;
         display: flex;
         align-items: center;
-        color: @txt-color;
+        color: var(--txt-color);
         margin-top: 10px;
         margin-bottom:0;
         width: 100%;
@@ -358,7 +358,7 @@ setTimeout(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: @bg-color;
+  background-color: var(--bg-color);
   .bounce_fall {
     -webkit-animation: bounce_fall 1s linear;
   }
@@ -452,12 +452,12 @@ setTimeout(() => {
     .ad-item {
       transition: all 0.5s;
       padding: 40px 10px;
-      color: @txt-color;
+      color: var(--txt-color);
       width: 24%;
       &:hover {
         border-radius: 11px;
-        background: @bg-color;
-        box-shadow: inset 22px 22px 45px @ad-shadow, inset -22px -22px 45px @bg-color;
+        background: var(--bg-color);
+        box-shadow: inset 22px 22px 45px var(--ad-shadow), inset -22px -22px 45px var(--bg-color);
       }
       .label {
         font-size: 24px;
@@ -499,14 +499,14 @@ setTimeout(() => {
     font-style: italic;
     font-weight: 600;
     letter-spacing: 5px;
-    color: @txt-color;
+    color: var(--txt-color);
   }
   .desc {
     font-family: "YYZY";
     font-size: 18px;
     min-height: 30px;
     margin-top: 20px;
-    color: @txt-color;
+    color: var(--txt-color);
   }
   .start-btn {
     font-family: inherit;

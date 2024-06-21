@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-26 11:00:18
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-05-24 16:39:17
+ * @LastEditTime: 2024-06-21 11:06:22
  * @Description: 
 -->
 <template>
@@ -132,7 +132,7 @@ listenMessage((info:MessageEvent)=>{
   width: 100%;
   min-width: 1200px;
   height: 100%;
-  background-color: @bg-color;
+  background-color: var(--bg-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,15 +157,14 @@ listenMessage((info:MessageEvent)=>{
     width: 1200px;
     height: 620px;
     border-radius: 30px;
-    background: @im-bg1;
-    box-shadow:  -17px -17px 19px @im-shadow1,
-                17px 17px 19px @im-shadow2;
+    background: var(--im-bg1);
+    box-shadow:  -17px -17px 19px var(--im-shadow1),
+                17px 17px 19px var(--im-shadow2);
     overflow: hidden;
     display: flex;
     .content-info{
       height: 100%;
       width: 98%;
-      // background-color: @im-content-bg1;
       position: relative;
       padding: 20px;
       padding-left: 0;

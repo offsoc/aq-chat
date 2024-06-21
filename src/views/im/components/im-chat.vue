@@ -288,9 +288,9 @@ defineExpose({changeExpression,rewriteFun})
   padding: 0 20px;
   width: 100%;
   // background-color: #fff;
-  background: @im-content-bg2;
+  background: var(--im-content-bg2);
   position: relative;
-  border-top: 1px solid @member-boder;
+  border-top: 1px solid var(--member-boder);
   .foot-top {
     width: 100%;
     height: 25%;

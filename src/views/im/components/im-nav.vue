@@ -31,7 +31,7 @@ const userInfo = appStore.userInfo
   position: relative;
   .user-name{
     margin: 20px auto;
-    color: @txt-color;
+    color: var(--txt-color);
     font-size: 14px;
     width: 90%;
     text-align: center;
@@ -47,7 +47,6 @@ const userInfo = appStore.userInfo
       width: 50px;
       border-radius: 50%;
       margin: auto;
-      // box-shadow:  0px 0px 10px @im-list-avatar-shadow1;
     }
   }
 }

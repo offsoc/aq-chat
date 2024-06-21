@@ -24,13 +24,13 @@ const roomList = ref([])
 .im-list {
   height: 100%;
   width: 20%;
-  background: @im-list-bg;
+  background: var(--im-list-bg);
   position: relative;
   .tool-box{
     height: 50px;
-    background: @bg-color;
-    box-shadow: inset 0px 5px 5px @im-search-shadow1,
-                inset 0px -5px 5px @im-search-shadow2;
+    background: var(--bg-color);
+    box-shadow: inset 0px 5px 5px var(--im-search-shadow1),
+                inset 0px -5px 5px var(--im-search-shadow2);
     display: flex;
     align-items: center;
     padding: 0 10px;
@@ -54,12 +54,12 @@ const roomList = ref([])
       align-items: center;
       width: calc(100% - 20px - 10px);
       padding: 4px 3px;
-      color: @txt-color;
+      color: var(--txt-color);
       input{
         background-color: transparent;
         outline: none;
         border: none;
-        color: @txt-color;
+        color: var(--txt-color);
         margin-left: 5px;
       }
     }

@@ -30,12 +30,12 @@ const appStore = useAppStore()
 .chat-number {
   width: 20%;
   height: 100%;
-  border-left: 1px solid @member-boder;
+  border-left: 1px solid var(--member-boder);
   padding: 20px;
   .room-txt{
     width: 100%;
     text-align: center;
-    color: @txt-color;
+    color: var(--txt-color);
     font-size: 14px;
   }
   .number-list{
@@ -48,7 +48,7 @@ const appStore = useAppStore()
     .user-name{
       width: calc(100% - 30px - 10px);
       text-align: left;
-      color: @txt-color;
+      color: var(--txt-color);
     }
     .ai-avatar{
       width: 36px;

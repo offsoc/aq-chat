@@ -119,9 +119,10 @@ defineExpose({
   position: relative;
   width: 100%;
   height: 70%;
-  border: 1px solid @member-boder;
+  border: 1px solid var(--member-boder);
   border-radius: 10px;
   overflow: hidden;
+  background-color: #fff;
   .editor {
     text-align: left;
     height: 66%;
@@ -129,7 +130,7 @@ defineExpose({
       height: 100%;
       overflow-y: auto;
       /deep/ .chat-rich-text {
-        color: @im-head-txt;
+        color: #000;
       }
     }
   }

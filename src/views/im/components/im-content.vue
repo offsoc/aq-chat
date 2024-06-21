@@ -327,7 +327,7 @@ const toBottom = () => {
   height: 100%;
   width: 100%;
   border-radius: 30px;
-  background: @im-content-bg2;
+  background: var(--im-content-bg2);
   overflow: hidden;
   ::v-deep .at-user{
     color: @im-primary;
@@ -337,8 +337,8 @@ const toBottom = () => {
     display: flex;
     width: 100%;
     justify-content: center;
-    background: @im-bg1;
-    color: @im-head-txt;
+    background: var(--im-bg1);
+    color: var(--im-head-txt);
     position: relative;
 
     .offline {
@@ -375,7 +375,6 @@ const toBottom = () => {
         position: relative;
         .ai-tip{
           width: 400px;
-          // background-color: var(--im-txt-bg);
           margin: 0 auto;
           margin-top: 20px;
           padding: 0 15px 15px 15px;
@@ -444,7 +443,7 @@ const toBottom = () => {
           width: 190px;
           height: 80px;
           border-radius: 4px;
-          background-color: @file-card-bg;
+          background-color: var(--file-card-bg);
           cursor: pointer;
 
           &:focus-visible {
@@ -461,7 +460,7 @@ const toBottom = () => {
             .info {
               width: calc(100% - 50px);
               font-size: 14px;
-              color: @file-card-txt;
+              color: var(--file-card-txt);
               text-align: left;
               line-height: 20px;
             }
@@ -476,7 +475,7 @@ const toBottom = () => {
             height: 25px;
             line-height: 25px;
             font-size: 12px;
-            color: @file-card-desc;
+            color: var(--file-card-desc);
             text-align: left;
             padding-left: 5px;
             border-top: 1px solid rgba(231, 231, 231, .5);
@@ -500,7 +499,7 @@ const toBottom = () => {
               padding-top: 20px;
               .user-name {
                 font-size: 12px;
-                color: @txt-color;
+                color: var(--txt-color);
                 position: absolute;
                 right: 0;
                 top: 0;
@@ -544,7 +543,7 @@ const toBottom = () => {
             .mine-file {}
 
             .text-block {
-              background: @im-txt-bg;
+              background: var(--im-txt-bg);
               color: #2d2e2f;
               border-top-left-radius: 0;
               border-bottom-right-radius: 0;
@@ -610,7 +609,7 @@ const toBottom = () => {
               padding-top: 20px;
               .user-name {
                 font-size: 12px;
-                color: @txt-color;
+                color: var(--txt-color);
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -618,7 +617,7 @@ const toBottom = () => {
               }
 
               .text-block {
-                background: @im-txt-bg;
+                background: var(--im-txt-bg);
                 color: #2d2e2f;
                 border-top-left-radius: 0;
                 border-bottom-right-radius: 0;
@@ -641,7 +640,7 @@ const toBottom = () => {
                   align-items: center;
                   font-size: 12px;
                   .copy{
-                    color: @ai-btn;
+                    color: var(--ai-btn);
                     cursor: pointer;
                     .icon-copy{
                       margin-right: 4px;
