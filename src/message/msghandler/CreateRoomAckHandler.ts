@@ -5,7 +5,6 @@
  */
 
 import * as AQChatMSg from '../protocol/AQChatMsgProtocol_pb';
-import AQSender from '../AQSender';
 
 export default class CreateRoomAckHandler {
 
