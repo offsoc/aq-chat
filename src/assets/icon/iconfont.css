@@ -1,9 +1,8 @@
-/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-  font-family: 'iconfont';  /* Project id 4519359 */
-  src: url('//at.alicdn.com/t/c/font_4519359_fqs25baqvm5.woff2?t=1718846921856') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4519359_fqs25baqvm5.woff?t=1718846921856') format('woff'),
-       url('//at.alicdn.com/t/c/font_4519359_fqs25baqvm5.ttf?t=1718846921856') format('truetype');
+  font-family: "iconfont"; /* Project id 4519359 */
+  src: url('iconfont.woff2?t=1719129832138') format('woff2'),
+       url('iconfont.woff?t=1719129832138') format('woff'),
+       url('iconfont.ttf?t=1719129832138') format('truetype');
 }
 
 .iconfont {
@@ -14,12 +13,44 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-light:before {
-  content: "\e769";
+.icon-copy:before {
+  content: "\e648";
 }
 
-.icon-dark:before {
-  content: "\e781";
+.icon-aite:before {
+  content: "\e600";
+}
+
+.icon-down:before {
+  content: "\e608";
+}
+
+.icon-mute:before {
+  content: "\e8b8";
+}
+
+.icon-sound:before {
+  content: "\e8b9";
+}
+
+.icon-meeting:before {
+  content: "\e64a";
+}
+
+.icon-join:before {
+  content: "\e606";
+}
+
+.icon-emoji:before {
+  content: "\e60a";
+}
+
+.icon-create:before {
+  content: "\e615";
+}
+
+.icon-enter:before {
+  content: "\e64c";
 }
 
 .icon-search:before {
@@ -30,34 +61,11 @@
   content: "\e652";
 }
 
-.icon-enter:before {
-  content: "\e64c";
+.icon-dark:before {
+  content: "\e781";
 }
 
-.icon-create:before {
-  content: "\e615";
+.icon-light:before {
+  content: "\e769";
 }
 
-.icon-join:before {
-  content: "\e606";
-}
-
-.icon-meeting:before {
-  content: "\e64a";
-}
-
-.icon-sound:before {
-  content: "\e8b9";
-}
-
-.icon-mute:before {
-  content: "\e8b8";
-}
-
-.icon-down:before {
-  content: "\e608";
-}
-
-.icon-copy:before {
-  content: "\e648";
-}
