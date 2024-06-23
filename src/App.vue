@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-20 18:08:20
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-05-24 09:33:52
+ * @LastEditTime: 2024-06-23 16:08:59
  * @Description: 
 -->
 <template>
@@ -36,13 +36,6 @@ const {
   initSocketFun
 } = useSocket()
 
-const isMobile = ()=> {
-    return navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i) || false
-}
-// 初始化设备类型
-const initDeviceFun = ()=> {
-  appStore.setIsMobile(isMobile())
-}
 // 切换主题
 const changeThemeFun = ()=> {
   if (themeActive.value) {
@@ -57,7 +50,6 @@ const changeThemeFun = ()=> {
 onMounted(() => {
   themeActive.value = appStore.theme === "light" ? true : false
   changeThemeFun()
-  initDeviceFun()
   initSocketFun();
 });
 </script>

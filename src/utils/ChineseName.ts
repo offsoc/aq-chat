@@ -3,7 +3,7 @@
  * @Date: 2024-06-19 20:14:09
  * @LastEditors: howcode 1051495009@qq.com
  * @LastEditTime: 2024-06-19 20:25:05
- * @Description: 
+ * @Description: 中文生成
  */
 export default class ChineseName {
   private familyNames = ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许',

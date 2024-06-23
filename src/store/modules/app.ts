@@ -21,7 +21,6 @@ interface RoomInfo {
 }
 
 interface AppState {
-    isMobile:boolean,
     // 主题
     theme:string,
     // websocket状态
@@ -53,7 +52,6 @@ const customSnowflake = new CustomSnowflake();
 
 const useAppStore = defineStore('app', {
     state: ():AppState => ({
-        isMobile:false,
         theme:"light",
         websocketStatus:false,
         userInfo:{
@@ -76,9 +74,7 @@ const useAppStore = defineStore('app', {
         aiCode:'',
         forceBottom:''
     }),
-    getters: {
-        mobile: (state) => state.isMobile,
-    },
+    getters: {},
     actions: {
         setMsgId(msgId:number|string){
             this.otherUserMsgId = msgId;
@@ -88,9 +84,6 @@ const useAppStore = defineStore('app', {
         },
         setForceBottom(code:number|string){
             this.forceBottom = code
-        },
-        setIsMobile(mobile:boolean) {
-            this.isMobile = mobile
         },
         setTheme(theme:string) {
             this.theme = theme

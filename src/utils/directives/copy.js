@@ -3,7 +3,7 @@
  * @Date: 2024-06-20 09:36:50
  * @LastEditors: howcode 1051495009@qq.com
  * @LastEditTime: 2024-06-20 09:43:35
- * @Description: 
+ * @Description: 复制指令
  */
 import { ElMessage } from "element-plus"
 const copys = (el, binding) => {
