@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-05-02 12:00:36
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-19 23:21:31
+ * @LastEditTime: 2024-06-23 16:00:16
  * @Description: websocket消息处理
  */
 import AQSender from '@/message/AQSender'
@@ -182,9 +182,8 @@ export default ()=>{
     }
   }
 
+  // 回复用户登录
   const toRecoverUserFun = ()=>{
-    
-    
     if(appStore.userInfo?.userId){
       if(route.name === 'IM'){
         const { userId,userName,userAvatar } = appStore.userInfo
@@ -200,6 +199,7 @@ export default ()=>{
       }
     }
   }
+  // 服务关闭提醒
   const connetTip = ()=>{
     ElMessageBox.confirm("服务已关闭，是否重新登录", "系统提示", {
       confirmButtonText: '确定',
