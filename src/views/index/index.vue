@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-20 18:16:54
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-28 15:50:59
+ * @LastEditTime: 2024-06-28 16:01:21
  * @Description: 首页
 -->
 <template>
@@ -18,10 +18,10 @@
         <div class="ad-desc" v-html="item.desc"></div>
       </div>
       <div class="ad-item">
-        <div class="label">🚝仓库</div>
+        <div class="label pointer"  @click="giteeHub">🚝仓库</div>
         <div class="ad-desc flex-c" >
           <div class="info">
-            <div class="git-name"><el-link href="https://gitee.com/howcode/aq-chat" target="_blank">AQChat</el-link></div>
+            <div class="git-name"><el-link  @click="giteeHub">AQChat</el-link></div>
             <a href='https://gitee.com/howcode/aq-chat/stargazers'><img src='https://gitee.com/howcode/aq-chat/badge/star.svg?theme=dark' alt='star'></img></a>
             <a href='https://gitee.com/howcode/aq-chat/members'><img src='https://gitee.com/howcode/aq-chat/badge/fork.svg?theme=dark' alt='fork'></img></a>
           </div>
@@ -133,6 +133,10 @@ const advantageList = [
     desc: "0引导</br>所见即所得",
   },
 ];
+
+const giteeHub = ()=>{
+  window.open('https://gitee.com/howcode/aq-chat')
+}
 
 const starTip = () => {
   ElNotification({

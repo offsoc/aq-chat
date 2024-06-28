@@ -2,11 +2,11 @@
   <div class="cn_notify">
     <div class="content">
       <i class="el-icon-message-solid"></i>
-      您的star是我们更新的动力，期待您的⭐
+      您的Star是我们更新的动力，期待您的⭐
     </div>
     <el-row justify="end">
       <el-col :span="7">
-        <el-button type="warning" @click="onSubmit">去Start</el-button>
+        <el-button type="warning" @click="onSubmit">去Star</el-button>
       </el-col>
     </el-row>
   </div>
