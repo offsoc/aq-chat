@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-20 18:16:54
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-20 10:04:14
+ * @LastEditTime: 2024-06-28 15:50:59
  * @Description: 首页
 -->
 <template>
@@ -95,13 +95,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref,h } from "vue";
 import LottieChat from "@/assets/json/lottie-chat.json";
 import LottieReload from "@/assets/json/lottie-reload.json";
 import LottieAni from "@/components/Lottie.vue";
 import useTyping from "./hook/useTyping";
 import useStart from "./hook/useStart";
 import useAppStore from "@/store/modules/app";
+import { ElNotification } from 'element-plus'
+import CnNotify from "@/components/CnNotify.vue";
 
 const appStore = useAppStore()
 const appDesc = ref("");
@@ -132,12 +134,19 @@ const advantageList = [
   },
 ];
 
-function toGitee(){
-  window.open('https://gitee.com/howcode/aq-chat')
+const starTip = () => {
+  ElNotification({
+    title: '提示',
+    duration: 10000,
+    position: "top-right",
+    dangerouslyUseHTMLString: true,
+    message: h(CnNotify)
+  })
 }
 
 setTimeout(() => {
   startTyping("一个极速、便捷的在线匿名聊天室", appDesc);
+  starTip()
 }, 1000);
 
 </script>
