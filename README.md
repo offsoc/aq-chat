@@ -5,6 +5,18 @@
  * @LastEditTime: 2024-06-20 10:01:40
  * @Description: 
 -->
+
+<p align="center">
+	<img alt="logo" height="50" src="https://docs.aqchat.run/aqchat.svg">
+</p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">AQChat</h1>
+<h4 align="center">一个已接入AI✨的极速、便捷的匿名在线即时AI聊天室。</h4>
+<p align="center">
+	<a href="https://gitee.com/howcode/aq-chat"><img src="https://gitee.com/howcode/aq-chat/badge/star.svg"></a>
+    <a href="https://gitee.com/howcode/aq-chat"><img src="https://gitee.com/howcode/aq-chat/badge/fork.svg"></a>
+    <a href="https://gitee.com/howcode/aq-chat"><img src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"></a>
+</p>
+
 # 项目说明
 
 AQChat 一个极速、便捷的匿名在线即时聊天室。
