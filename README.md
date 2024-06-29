@@ -17,6 +17,9 @@
     <a href="https://gitee.com/howcode/aq-chat"><img src="https://img.shields.io/badge/License-Apache--2.0-brightgreen.svg"></a>
 </p>
 
+
+[官网文档](https://docs.aqchat.run/)
+
 # 项目说明
 
 AQChat 一个极速、便捷的匿名在线即时聊天室。
