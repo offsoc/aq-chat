@@ -3,11 +3,15 @@
     <div class="option-list">
       <div class="option" @click="createRoomFun">
         <i class="iconfont icon-create"></i>
-        创建
+        <div class="txt">创建</div>
       </div>
       <div class="option" @click="joinRoomFun">
         <i class="iconfont icon-join"></i>
-        加入
+        <div class="txt">加入</div>
+      </div>
+      <div class="option" @click="createAiFun">
+        <lottie-ani class="icon-ai" :src="lottieAi" />
+        <div class="txt">AI空间</div>
       </div>
     </div>
     <div class="lottie-box">
@@ -78,6 +82,7 @@ import { ref,nextTick,reactive } from "vue"
 import useAppStore from "@/store/modules/app"
 import LottieAni from "@/components/Lottie.vue";
 import lottieContent from "@/assets/json/lottie-content.json";
+import lottieAi from "@/assets/json/lottie-ai.json";
 import { ElMessageBox,FormRules  } from 'element-plus'
 import AQSender from '@/message/AQSender'
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
@@ -123,6 +128,11 @@ const vInteger = {
   }
 }
 
+// 创建ai空间
+const createAiFun = ()=>{
+
+}
+// 创建房间
 const createRoomFun = ()=>{
   if(!appStore.websocketStatus){
     ElMessageBox.confirm("服务已关闭，是否重新登录", "系统提示", {
@@ -141,7 +151,7 @@ const createRoomFun = ()=>{
   step.value = 1;
   initForm();
 }
-
+// 初始化表单
 const initForm = ()=>{
   dialogVisible.value = true
   roomForm.value.roomName = '';
@@ -155,7 +165,7 @@ const initForm = ()=>{
     },500)
   })
 }
-
+// 加入房间
 const joinRoomFun = ()=>{
   if(!appStore.websocketStatus){
     ElMessageBox.confirm("服务已关闭，是否重新登录", "系统提示", {
@@ -173,53 +183,52 @@ const joinRoomFun = ()=>{
   step.value = 2;
   initForm();
 }
-
 // 进入聊天室
 const enterRoomFun = async ()=>{
-    if(!appStore.websocketStatus){
-      ElMessageBox.confirm("服务已关闭，是否重新登录", "系统提示", {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: "warning",
-        }).then(res=>{
-          router.replace({
-            name:'Index'
-          })
-          appStore.resetAllInfo();
+  if(!appStore.websocketStatus){
+    ElMessageBox.confirm("服务已关闭，是否重新登录", "系统提示", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: "warning",
+      }).then(res=>{
+        router.replace({
+          name:'Index'
         })
-      return
-    }
-    if(step.value == 1){
-      if (!roomFormRef.value) return
-      await roomFormRef.value.validate((valid:any, fields:any) => {
-        if (valid) {
-          let msg = new AQChatMSg.default.CreateRoomCmd();
-          msg.setRoomno(roomForm.value.roomNo.toString());
-          if(roomForm.value.roomName){
-            msg.setRoomname(roomForm.value.roomName.trim());
-          }
-          msg.setHistory(roomForm.value.history);
-          msg.setAi(roomForm.value.ai);
-          AQSender.getInstance().sendMsg(AQChatMSg.default.MsgCommand.CREATE_ROOM_CMD,msg)
-        } else {
-          console.log('error submit!', fields)
-        }
+        appStore.resetAllInfo();
       })
-    }else if(step.value == 2){
-      if (!roomFormRef.value) return
-      await roomFormRef.value.validate((valid:any, fields:any) => {
-        if (valid) {
-          let msg = new AQChatMSg.default.JoinRoomCmd();
-          msg.setRoomno(roomForm.value.roomNo);
-          AQSender.getInstance().sendMsg(
-            AQChatMSg.default.MsgCommand.JOIN_ROOM_CMD,msg
-          )
-        } else {
-          console.log('error submit!', fields)
-        }
-      })
-    }
+    return
   }
+  if(step.value == 1){
+    if (!roomFormRef.value) return
+    await roomFormRef.value.validate((valid:any, fields:any) => {
+      if (valid) {
+        let msg = new AQChatMSg.default.CreateRoomCmd();
+        msg.setRoomno(roomForm.value.roomNo.toString());
+        if(roomForm.value.roomName){
+          msg.setRoomname(roomForm.value.roomName.trim());
+        }
+        msg.setHistory(roomForm.value.history);
+        msg.setAi(roomForm.value.ai);
+        AQSender.getInstance().sendMsg(AQChatMSg.default.MsgCommand.CREATE_ROOM_CMD,msg)
+      } else {
+        console.log('error submit!', fields)
+      }
+    })
+  }else if(step.value == 2){
+    if (!roomFormRef.value) return
+    await roomFormRef.value.validate((valid:any, fields:any) => {
+      if (valid) {
+        let msg = new AQChatMSg.default.JoinRoomCmd();
+        msg.setRoomno(roomForm.value.roomNo);
+        AQSender.getInstance().sendMsg(
+          AQChatMSg.default.MsgCommand.JOIN_ROOM_CMD,msg
+        )
+      } else {
+        console.log('error submit!', fields)
+      }
+    })
+  }
+}
 </script>
 <style>
 .pop-start {
@@ -358,22 +367,14 @@ const enterRoomFun = async ()=>{
 .im-domain {
   height: 100%;
   width: 100%;
-  // border-bottom-right-radius: 30px;
-  // border-top-right-radius: 30px;
   border-radius: 30px;
   background: var(--im-list-bg);
   display:flex;
   flex-direction: column-reverse;
   align-items: end;
   position: relative;
-// background: #F8F8F8;
-// box-shadow: inset 13px 13px 18px #e7e7e7,
-//             inset -13px -13px 18px #ffffff;
-// background: #272A2F;
-// box-shadow: inset 13px 13px 18px #24272c,
-//             inset -13px -13px 18px #2a2d32;
   .lottie-box{
-    width: 70%;
+    width: 60%;
     height: 80%;
     transition: all 0.5s;
     margin-left: 80px;
@@ -388,7 +389,7 @@ const enterRoomFun = async ()=>{
     display:flex;
     align-items: center;
     justify-content: space-around;
-    width: 300px;
+    width: 400px;
     position: absolute;
     top: 100px;
     left: 20px;
@@ -398,52 +399,55 @@ const enterRoomFun = async ()=>{
       display: flex;
       flex-direction: column;
       justify-content: center;
+      justify-items: center;
       background-color: @im-primary;
       border-radius: 16px;
       color: #fff;
       cursor: pointer;
       transition: 500ms;
       position: relative;
-      padding-top: 40px;
+      transition: all .5s;
       &:active {
         transform: translate(3px , 3px);
         transition-duration: .3s;
         box-shadow: 2px 2px 0px @im-primary;
       }
+      .txt{
+        transition: all .6s;
+      }
       &:hover {
-        color: transparent;
+        .txt{
+          color: transparent;
+        }
+        .iconfont {
+          transform: translateY(10px);
+          font-size: 50px;
+        }
+        .icon-ai{
+          // transform: translateY(10px) scale(1.5);
+          transform: translateY(10px);
+          height: 55%!important;
+          .txt{
+            transform: translateY(10px)
+          }
+        }
       }
       .iconfont {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
         fill: white;
         transition-duration: .3s;
-      }
-      &:hover .icon-create{
-          font-size: 40px;
-      }
-      &:hover .icon-join{
-          font-size: 40px;
-      }
-      &:hover .iconfont {
-        top: 50%;
-        transform: translate(-50%,-50%);
-        margin: 0;
-        padding: 0;
-        border: none;
-        transition-duration: .3s;
-        color: #fff;
       }
       .icon-create {
         font-size: 34px;
         margin-bottom: 6px;
-        
       }
       .icon-join {
         font-size: 34px;
         margin-bottom: 10px;
+      }
+      .icon-ai{
+        transform: translateY(-5px);
+        height: 45%!important;
+        transition: all .5s;
       }
     }
   }
