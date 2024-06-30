@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-20 18:16:54
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-28 16:01:21
+ * @LastEditTime: 2024-06-30 14:00:46
  * @Description: 首页
 -->
 <template>
@@ -13,19 +13,9 @@
     <div class="title bounce_fall">AQChat</div>
     <div class="desc">{{ appDesc }}</div>
     <div class="advantage-list">
-      <div v-for="item in advantageList" :key="item.title" class="ad-item">
+      <div v-for="item in advantageList" :key="item.title" class="ad-item pointer" @click="toUrl(item)">
         <div class="label">{{ item.title }}</div>
         <div class="ad-desc" v-html="item.desc"></div>
-      </div>
-      <div class="ad-item">
-        <div class="label pointer"  @click="giteeHub">🚝仓库</div>
-        <div class="ad-desc flex-c" >
-          <div class="info">
-            <div class="git-name"><el-link  @click="giteeHub">AQChat</el-link></div>
-            <a href='https://gitee.com/howcode/aq-chat/stargazers'><img src='https://gitee.com/howcode/aq-chat/badge/star.svg?theme=dark' alt='star'></img></a>
-            <a href='https://gitee.com/howcode/aq-chat/members'><img src='https://gitee.com/howcode/aq-chat/badge/fork.svg?theme=dark' alt='fork'></img></a>
-          </div>
-        </div>
       </div>
     </div>
     <div class="start-btn" @click="toStartFun">
@@ -69,11 +59,6 @@
           </div>
         </div>
         <el-form :model="userForm" label-width="160px" ref="userFormRef" :rules="userRules">
-          
-          <!-- <div class="user-name">
-            用户名
-            <input placeholder="请输入用户名" v-model="userForm.userName" />
-          </div> -->
           <el-form-item :inline-message="true" class="form-item" prop="userName" label="用户名">
             <el-input placeholder="请输入用户名" v-model="userForm.userName" />
           </el-form-item>
@@ -132,15 +117,23 @@ const advantageList = [
     title: "✨简单",
     desc: "0引导</br>所见即所得",
   },
+  {
+    title: "🚝官网文档",
+    desc: "AQChat文档中心</br>详细的部署教程、设计思路等",
+    url:'https://docs.aqchat.run/'
+  },
 ];
 
-const giteeHub = ()=>{
-  window.open('https://gitee.com/howcode/aq-chat')
+
+
+const toUrl = (row:any)=>{
+  if(!row.url) return
+  window.open(row.url,row.title)
 }
 
 const starTip = () => {
   ElNotification({
-    title: '提示',
+    title: '',
     duration: 10000,
     position: "top-right",
     dangerouslyUseHTMLString: true,
