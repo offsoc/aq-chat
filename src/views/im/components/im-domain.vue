@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref,nextTick,reactive } from "vue"
+import { ref,nextTick,reactive,h } from "vue"
 import useAppStore from "@/store/modules/app"
 import LottieAni from "@/components/Lottie.vue";
 import lottieContent from "@/assets/json/lottie-content.json";
@@ -88,6 +88,7 @@ import AQSender from '@/message/AQSender'
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import { useRouter } from "vue-router";
 import AiTypeEnum from "@/enums/AiTypeEnum"
+import aiStart from "./ai-start.vue"
 
 interface RoomForm {
   roomNo:string,
@@ -144,7 +145,10 @@ const createAiFun = ()=>{
     })
     return
   }
-  ElMessageBox.confirm("AI空间是基于 Gitee AI 研发的 Serverless 推理引擎，为用户提供文本生成、图像生成、语音处理等多种主流模型，是否开启AI空间", "系统提示", {
+  ElMessageBox({
+    title: '准备起飞',
+    message:h(aiStart),
+    showCancelButton: true,
     confirmButtonText: 'AI空间，启动！',
     cancelButtonText: '我再想想',
   }).then(res=>{
@@ -154,6 +158,16 @@ const createAiFun = ()=>{
       AQChatMSg.default.MsgCommand.OPEN_AI_ROOM_CMD,msg
     )
   })
+  // ElMessageBox.confirm("AI空间是基于 Gitee AI 研发的 Serverless 推理引擎，为用户提供文本生成、图像生成、语音处理等多种主流模型，是否开启AI空间体验？", "系统提示", {
+  //   confirmButtonText: 'AI空间，启动！',
+  //   cancelButtonText: '我再想想',
+  // }).then(res=>{
+  //   let msg = new AQChatMSg.default.OpenAiRoomCmd();
+  //   msg.setUserid(appStore.userInfo.userId);
+  //   AQSender.getInstance().sendMsg(
+  //     AQChatMSg.default.MsgCommand.OPEN_AI_ROOM_CMD,msg
+  //   )
+  // })
 }
 // 创建房间
 const createRoomFun = ()=>{
