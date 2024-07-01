@@ -7,7 +7,7 @@
 -->
 <template>
   <div class="chat-number ">
-    <div class="room-txt">房间成员({{ appStore.memberList.length }})</div>
+    <div class="room-txt">{{appStore.roomInfo.ai === AiTypeEnum.AIZOOM ? 'AI助手列表':'房间成员'}}({{ appStore.memberList.length }})</div>
     <div class="number-list scroll_container">
       <div class="number-item" v-for="item in appStore.memberList" :key="item.userId">
         <img v-if="item.userAvatar.indexOf('png') != -1" class="ai-avatar" :src="item.userAvatar" />
@@ -19,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import AiTypeEnum from '@/enums/AiTypeEnum'
 import useAppStore from '@/store/modules/app'
 
 const appStore = useAppStore()

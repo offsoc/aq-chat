@@ -20,6 +20,7 @@ import 'chatarea/lib/ChatArea.css'
 import MsgTypeEnum from "@/enums/MsgTypeEnum"
 import useAppStore from "@/store/modules/app"
 import User from '@/class/User'
+import AiTypeEnum from '@/enums/AiTypeEnum'
 
 const chat = ref();
 const appStore = useAppStore()
@@ -40,8 +41,9 @@ const initChat = () => {
     },
     userList: []
   })
+  const title = appStore.roomInfo.ai === AiTypeEnum.AIZOOM ? 'AI助手':'房间成员'
   chat.value.revisePCPointDialogLabel({
-      title: '房间成员',
+      title: title,
       checkLabel: ''
   })
   // 绑定键盘发送事件（默认配置为回车发送）
@@ -49,15 +51,17 @@ const initChat = () => {
 }
 
 const initUserList = ()=>{
-  if (!chat.value) return
   let list = memberList.map(x=>{
     return {
       userId:x.userId,
       userName:x.userName,
-      userAvatar:x.userAvatar.indexOf('png') != -1 ? null : svgToDataURL(x.userAvatar)
+      userAvatar:x.userAvatar.indexOf('png') != -1 ? x.userAvatar : svgToDataURL(x.userAvatar)
     }
   })
-  chat.value.updateUserList(list)
+  setTimeout(()=>{
+    if (!chat.value) return
+    chat.value.updateUserList(list)
+  },500)
 }
 
 const svgToDataURL = (html:any)=> {
