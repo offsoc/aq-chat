@@ -13,53 +13,13 @@
               <lottie-ani class="icon-ai" :src="lottieAi" />
               <div class="txt">欢迎进入AI空间（AI Space），您可以直接发起连续提问，小T会回答您任何问题。</div>
               <div class="txt">如有其它需求，可以选择@其他AI助手。</div>
-            </div>
-            <!-- <div class="reciver-box msg-box">
-              <div class="reciver-block">
-                <img v-if="item.user.userAvatar.indexOf('png') != -1" class="ai-avatar" :src="item.user.userAvatar" />
-                <div v-else class="reciver-avatar" v-html="item.user.userAvatar">
-                </div>
-                <div class="info-box">
-                  <div class="user-name text-ellipsis">{{ item.user.userName }}</div>
-                  <div v-if="item.msgType === MsgTypeEnum.TEXT" class="text-block md-block">
-                    <Markdown :source="item.msg" />
-                    <div v-if="item.user?.userId != 'AQChatHelper_INIT'" class="ai-btn">
-                      <div class="copy" v-copy="item.msg">
-                        <i class="iconfont icon-copy"></i>
-                        复制
-                      </div>
-                    </div>
-                  </div>
-                  <img v-else-if="item.msgType === MsgTypeEnum.IMAGE" class="send-image" v-bind:src="item.msg"
-                    @click="privewImage(item.msg)" preview="1" />
-                  <video class="send-video" v-else-if="item.msgType === MsgTypeEnum.VIDEO" width="320" height="240"
-                    controls>
-                    <source :src="item.msg" type="video/mp4" />
-                    您的浏览器不支持 HTML5 video 标签。
-                  </video>
-                  <audio class="send-video" v-else-if="item.msgType === MsgTypeEnum.VOICE" controls>
-                    <source :src="item.msg" type="audio/mpeg" />
-                    您的浏览器不支持该音频格式。
-                  </audio>
-                  <el-dropdown v-else-if="item.msgType === MsgTypeEnum.FILE" trigger="click">
-                    <div class="file-card">
-                      <div class="file-top">
-                        <div class="info nowrap-2">
-                          {{ item.ext }}
-                        </div>
-                        <img class="icon-file" src="@/assets/images/icon-file.png" alt="">
-                      </div>
-                      <div class="file-bottom">文件</div>
-                    </div>
-                    <template #dropdown>
-                      <el-dropdown-menu>
-                        <el-dropdown-item @click="downloadFileFun(item.msg, item.ext)">下载</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </template>
-                  </el-dropdown>
+              <div class="ai-list">
+                <div class="ai-item" v-for="item in aiInfoList" :key="item.userName">
+                  <img class="ai-avatar" :src="item.userAvatar" alt="">
+                  <div class="ai-desc">{{ item.desc }}</div>
                 </div>
               </div>
-            </div> -->
+            </div>
             <template v-for="(item,index) in appStore.msgList" :key="item.msgId">
               <div v-if="item.msgType == MsgTypeEnum.TIP" class="msg-tip msg-box">
                 {{ item.msg }}<span v-if="item.msg.indexOf('撤回')!=-1 && item.ext" class='rewrite-box' @click='rewriteFun(item.ext)'>重新编辑</span>
@@ -170,7 +130,7 @@ import MsgTypeEnum from '@/enums/MsgTypeEnum'
 import MsgStatusEnum from '@/enums/MsgStatusEnum'
 import AQSender from '@/message/AQSender'
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
-import { watch, ref, getCurrentInstance, onMounted } from 'vue'
+import { watch, ref, getCurrentInstance } from 'vue'
 import Loading from "@/components/Loading.vue"
 import { ElMessage, ElMessageBox } from 'element-plus'
 import ImNumber from "./im-number.vue"
@@ -178,8 +138,6 @@ import Msg from '@/class/Msg'
 import Markdown from 'vue3-markdown-it';
 import LottieAni from "@/components/Lottie.vue";
 import lottieAi from "@/assets/json/lottie-ai.json";
-
-
 
 const appStore = useAppStore()
 const { proxy }: any = getCurrentInstance();
@@ -210,60 +168,28 @@ const optionsComponent =  ref({
 })
 const currentMsg = ref()
 const imCharRef = ref()
-
-onMounted(()=>{
-  let msg:Msg = {
-    roomId:appStore.roomInfo.roomId,
-    msgId:+new Date()+'',
-    msgType:MsgTypeEnum.TEXT,
-    msg:`您好，我是小T，我支持多轮对话！无需艾特我也能和我发起对话`,
-    user:{
-      userId:'AQChatHelper_INIT',
-      userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xt.png",
-      userName:'小T',
-    },
+const aiInfoList = [
+  {
+    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/AQChatAI.png",
+    userName:'小Q',
+    desc:'您好，我是小Q，@我，可以根据您的文本回答问题'
+  },
+  {
+    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xt.png",
+    userName:'小T',
+    desc:'您好，我是小T，无需@我就可和我随时发起多轮对话'
+  },
+  {
+    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xv.png",
+    userName:'小V',
+    desc:'您好，我是小V，@我，可以根据您的文本生成真人语音'
+  },
+  {
+    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xm.png",
+    userName:'小M',
+    desc:'您好，我是小M，@我，可以帮助您的文本生成图片（使用英语描述更佳）'
   }
-  appStore.sendInfoLocalFun(msg)
-
-  msg = {
-    roomId:appStore.roomInfo.roomId,
-    msgId:+new Date()+'',
-    msgType:MsgTypeEnum.TEXT,
-    msg:`您好，我是小Q，@我，可以根据您的文本回答问题`,
-    user:{
-      userId:'AQChatHelper_INIT',
-      userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/AQChatAI.png",
-      userName:'小Q',
-    },
-  }
-  appStore.sendInfoLocalFun(msg)
-
-  msg = {
-    roomId:appStore.roomInfo.roomId,
-    msgId:+new Date()+'',
-    msgType:MsgTypeEnum.TEXT,
-    msg:`您好，我是小V，@我，可以根据您的文本生成真人语音`,
-    user:{
-      userId:'AQChatHelper_INIT',
-      userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xv.png",
-      userName:'小V',
-    },
-  }
-  appStore.sendInfoLocalFun(msg)
-
-  msg = {
-    roomId:appStore.roomInfo.roomId,
-    msgId:+new Date()+'',
-    msgType:MsgTypeEnum.TEXT,
-    msg:`您好，我是小M，@我，可以帮助您的文本生成图片`,
-    user:{
-      userId:'AQChatHelper_INIT',
-      userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xm.png",
-      userName:'小M',
-    },
-  }
-  appStore.sendInfoLocalFun(msg)
-})
+]
 
 // 监听websocket状态
 watch(() => appStore.websocketStatus, (newV) => {
@@ -474,11 +400,25 @@ const toBottom = () => {
         height: 70%;
         position: relative;
         .ai-tip{
-          width: 80%;
+          width: 90%;
           margin: 0 auto;
           padding: 20px 15px 15px 15px;
           border-radius: 10px;
           text-align: left;
+          color: var(--txt-color);
+          .ai-list{
+            margin-top: 10px;
+            .ai-item {
+              display: flex;
+              align-items: center;
+              .ai-avatar{
+                width: 45px;
+                height: 45px;
+                margin-right: 15px;
+                border-radius: 50%;
+              }
+            }
+          }
           .icon-ai{
             height: 100px!important;
             width: 100px!important;
@@ -493,7 +433,6 @@ const toBottom = () => {
           }
           .txt,.txt2{
             font-size: 16px;
-            color: #3f3f3f;
             line-height: 26px;
           }
         }
