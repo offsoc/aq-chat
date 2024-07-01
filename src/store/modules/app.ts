@@ -12,12 +12,13 @@ import AQSender from '@/message/AQSender'
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import CustomSnowflake from "@/utils/CustomSnowflake"
 import MsgTypeEnum from "@/enums/MsgTypeEnum"
+import AiTypeEnum from "@/enums/AiTypeEnum"
 
 interface RoomInfo {
     roomId:string,
     roomNo:string,
     roomName:string,
-    ai:number
+    ai:AiTypeEnum
 }
 
 interface AppState {
@@ -63,7 +64,7 @@ const useAppStore = defineStore('app', {
             roomId:'',
             roomNo:'',
             roomName:'',
-            ai:0
+            ai:AiTypeEnum.CLOSE
         },
         msgList:[],
         msgStatusTimer:{},
@@ -169,7 +170,7 @@ const useAppStore = defineStore('app', {
                 roomId:'',
                 roomNo:'',
                 roomName:'',
-                ai:0
+                ai:AiTypeEnum.CLOSE
             }
             this.userInfo = {
                 userId:'',
@@ -183,7 +184,7 @@ const useAppStore = defineStore('app', {
                 roomId:'',
                 roomNo:'',
                 roomName:'',
-                ai:0
+                ai:AiTypeEnum.CLOSE
             }
             this.msgList = []
         },
@@ -204,9 +205,6 @@ const useAppStore = defineStore('app', {
         },
         // 设置消息状态
         setMsgStatus(index:number,status:MsgStatusEnum){
-            console.log(this.msgList);
-            console.log(index);
-            
             this.msgList[index].msgStatus = status;
         }
     },
