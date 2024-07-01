@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-26 11:00:18
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-21 11:06:22
+ * @LastEditTime: 2024-07-01 15:02:15
  * @Description: 
 -->
 <template>
@@ -35,6 +35,7 @@
       <im-nav />
       <div class="content-info">
         <im-domain v-if="!appStore.roomInfo.roomId" />
+        <im-ai v-else-if="appStore.roomInfo.ai === AiTypeEnum.AIZOOM" class="transition-effect" />
         <im-content v-else class="transition-effect" />
       </div>
     </div>
@@ -46,12 +47,14 @@ import { ElMessageBox } from 'element-plus'
 import ImNav from "./components/im-nav.vue"
 import ImContent from "./components/im-content.vue"
 import ImDomain from "./components/im-domain.vue"
+import ImAi from "./components/im-ai.vue"
 import useAppStore from "@/store/modules/app"
 import { useRoute, useRouter } from "vue-router";
 import AQSender from '@/message/AQSender'
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import { ref } from 'vue'
 import { sendMessage, listenMessage,removeListenMsg } from '@/utils/CrossTagMsg'
+import AiTypeEnum from "@/enums/AiTypeEnum"
 
 const appStore = useAppStore()
 const router = useRouter();
@@ -155,7 +158,7 @@ listenMessage((info:MessageEvent)=>{
   }
   .content {
     width: 1200px;
-    height: 620px;
+    height: 90%;
     border-radius: 30px;
     background: var(--im-bg1);
     box-shadow:  -17px -17px 19px var(--im-shadow1),

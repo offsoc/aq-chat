@@ -89,6 +89,9 @@ const sendVerify = ()=> {
     let extArray = callUserList.map((x:any)=>x.userId);
     extArray = extArray.map((element:string) => "@"+element);
     let ext = extArray.join(',');
+    // 获取聊天框text内容，使用&拼接，用于给ai分析纯文本内容
+    const textMsg = chat.value.getText()
+    ext+=`&${textMsg}`
     appStore.setForceBottom(+new Date())
     appStore.sendInfo(sendContent,MsgTypeEnum.TEXT,ext);
   // 清空聊天框

@@ -87,12 +87,13 @@ import { ElMessageBox,FormRules  } from 'element-plus'
 import AQSender from '@/message/AQSender'
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import { useRouter } from "vue-router";
+import AiTypeEnum from "@/enums/AiTypeEnum"
 
 interface RoomForm {
   roomNo:string,
   roomName?:string,
   history?:number,
-  ai?:number,
+  ai?:AiTypeEnum.CLOSE,
 }
 const appStore = useAppStore()
 const step = ref(0);
@@ -101,7 +102,7 @@ const roomForm = ref<RoomForm>({
   roomNo:'',
   roomName:'',
   history:1,
-  ai:0
+  ai:AiTypeEnum.CLOSE
 })
 const router = useRouter();
 const roomNoRef = ref()
@@ -130,7 +131,29 @@ const vInteger = {
 
 // 创建ai空间
 const createAiFun = ()=>{
-
+  if(!appStore.websocketStatus){
+    ElMessageBox.confirm("服务已关闭，是否重新登录", "系统提示", {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: "warning",
+    }).then(res=>{
+      router.replace({
+        name:'Index'
+      })
+      appStore.resetAllInfo();
+    })
+    return
+  }
+  ElMessageBox.confirm("AI空间是基于 Gitee AI 研发的 Serverless 推理引擎，为用户提供文本生成、图像生成、语音处理等多种主流模型，是否开启AI空间", "系统提示", {
+    confirmButtonText: 'AI空间，启动！',
+    cancelButtonText: '我再想想',
+  }).then(res=>{
+    let msg = new AQChatMSg.default.OpenAiRoomCmd();
+    msg.setUserid(appStore.userInfo.userId);
+    AQSender.getInstance().sendMsg(
+      AQChatMSg.default.MsgCommand.OPEN_AI_ROOM_CMD,msg
+    )
+  })
 }
 // 创建房间
 const createRoomFun = ()=>{

@@ -1,37 +1,39 @@
 <template>
   <footer class="footer transition-effect">
     <!--工具栏-->
-    <div class="foot-top">
-      <ul>
-        <li @click="changeExpression()">
-          <img class="icon icon-expression" src="@/assets/images/icon-expression.png" alt="">
-        </li>
-        <li @click="expressionShow = false">
-          <img class="icon icon-image" src="@/assets/images/icon-files.png" alt="">
-          <input
-            ref="uploadRef"
-            class="file-image"
-            type="file"
-            value=""
-            v-on:change="sendFile()"
-          />
-        </li>
-      </ul>
-    </div>
-    <!--表情包-->
-    <div v-click-outside="cancleExpression" v-show="expressionShow" class="emjon">
-      <el-scrollbar style="max-height: 100%">
+    <template v-if="appStore.roomInfo.ai != AiTypeEnum.AIZOOM">
+      <div class="foot-top">
         <ul>
-          <li
-            v-for="item in expressions"
-            :key="item.title"
-            :title="item.title"
-          >
-            <img :src="item.icon" @click="selectIcon(item.icon)" />
+          <li @click="changeExpression()">
+            <img class="icon icon-expression" src="@/assets/images/icon-expression.png" alt="">
+          </li>
+          <li @click="expressionShow = false">
+            <img class="icon icon-image" src="@/assets/images/icon-files.png" alt="">
+            <input
+              ref="uploadRef"
+              class="file-image"
+              type="file"
+              value=""
+              v-on:change="sendFile()"
+            />
           </li>
         </ul>
-      </el-scrollbar>
-    </div>
+      </div>
+      <!--表情包-->
+      <div v-click-outside="cancleExpression" v-show="expressionShow" class="emjon">
+        <el-scrollbar style="max-height: 100%">
+          <ul>
+            <li
+              v-for="item in expressions"
+              :key="item.title"
+              :title="item.title"
+            >
+              <img :src="item.icon" @click="selectIcon(item.icon)" />
+            </li>
+          </ul>
+        </el-scrollbar>
+      </div>
+    </template>
     <im-editor
       v-model="imContent"
       ref="imEditorRef"
@@ -43,13 +45,13 @@
 import ImEditor from "./im-editor.vue";
 import { ref,defineExpose,inject } from "vue";
 import { OssHelper } from '@/utils/OssHelper';
-import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb';
 import useAppStore from "@/store/modules/app"
 import MsgTypeEnum from "@/enums/MsgTypeEnum"
 import { ClickOutside as vClickOutside, ElMessage } from "element-plus";
 import CustomSnowflake from "@/utils/CustomSnowflake"
 import Msg from '@/class/Msg'
 import MsgStatusEnum from '@/enums/MsgStatusEnum'
+import AiTypeEnum from '@/enums/AiTypeEnum'
 
 const customSnowflake = new CustomSnowflake();
 const appStore = useAppStore()
@@ -291,6 +293,9 @@ defineExpose({changeExpression,rewriteFun})
   background: var(--im-content-bg2);
   position: relative;
   border-top: 1px solid var(--member-boder);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   .foot-top {
     width: 100%;
     height: 25%;

@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-05-02 12:00:36
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-23 16:00:16
+ * @LastEditTime: 2024-07-01 16:37:10
  * @Description: websocket消息处理
  */
 import AQSender from '@/message/AQSender'
@@ -12,10 +12,11 @@ import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import useAppStore from "@/store/modules/app"
 import { ElMessage,ElMessageBox,ElLoading } from 'element-plus'
 import { useRouter,useRoute } from 'vue-router'
-import ExceptionEnum from "../enums/ExceptionEnum"
-import MsgStatusEnum from "../enums/MsgStatusEnum"
+import ExceptionEnum from "@/enums/ExceptionEnum"
+import MsgStatusEnum from "@/enums/MsgStatusEnum"
 import Msg from "../class/Msg"
-import MsgTypeEnum from "../enums/MsgTypeEnum"
+import MsgTypeEnum from "@/enums/MsgTypeEnum"
+import AiTypeEnum from "@/enums/AiTypeEnum"
 import { ref } from 'vue'
 
 export default ()=>{
@@ -68,14 +69,14 @@ export default ()=>{
           // 创建房间回调
           case AQChatMSg.default.MsgCommand.CREATE_ROOM_ACK:
             appStore.setRoomInfo(result);
-            if(result.ai === 1){
+            if(result.ai === AiTypeEnum.OPEN){
               initAiFun();
             }
             break;
           // 加入房间回调
           case AQChatMSg.default.MsgCommand.JOIN_ROOM_ACK:
             appStore.setRoomInfo(result);
-            if(result.ai === 1){
+            if(result.ai === AiTypeEnum.OPEN){
               initAiFun();
             }
             sendSyncChatRecordFun();
@@ -135,6 +136,14 @@ export default ()=>{
           case AQChatMSg.default.MsgCommand.STREAM_MSG_NOTIFY:
             streamMsgNotifyFun(result)
             break;
+          // 开启AI空间回调
+          case AQChatMSg.default.MsgCommand.OPEN_AI_ROOM_ACK:
+            openAiRoomFun(result)
+            break;
+          // AI消息回调
+          case AQChatMSg.default.MsgCommand.AI_REPLY_MSG_ACK:
+            aiReplyMsg(result)
+            break;
           // 异常消息回调
           case AQChatMSg.default.MsgCommand.EXCEPTION_MSG:
             exceptionFun(result);
@@ -182,6 +191,41 @@ export default ()=>{
     }
   }
 
+  // ai消息回调
+  const aiReplyMsg =  (result:any)=>{
+    console.log("ai消息回调",result.msg);
+    let currentMsg = appStore.msgList.find(x=>x.msgId === result.msgId);
+    if(currentMsg){
+      currentMsg.msg += result.msg
+      appStore.setAiCode(+new Date()+'')
+    }else{
+      const msg:Msg = {
+        user:{
+          userId:result.userId,
+          userAvatar:result.userAvatar,
+          userName:result.userName,
+        },
+        roomId:result.roomId,
+        msgType:result.msgType,
+        msg:result.msg,
+        msgId:result.msgId
+      }
+      appStore.sendInfoLocalFun(msg)
+      appStore.setMsgId(result.msgId)
+    }
+  }
+
+  // 开启AI空间回调
+  const openAiRoomFun = (result:any)=>{
+    const roomInfo = {
+      roomId:result.roomId,
+      roomName:'AI空间',
+      roomNo:'1024',
+      ai:AiTypeEnum.AIZOOM
+    }
+    appStore.setRoomInfo(roomInfo);
+    appStore.memberList = result.assistantsList
+  }
   // 回复用户登录
   const toRecoverUserFun = ()=>{
     if(appStore.userInfo?.userId){
@@ -288,6 +332,8 @@ export default ()=>{
   }
   // 房间成员同步
   const syncRoomMembersFun = (result:any) =>{
+    console.log('房间成员同步',result);
+    
     appStore.memberList = result;
   }
   // 当前用户离线
@@ -395,7 +441,7 @@ export default ()=>{
       roomId:appStore.roomInfo.roomId,
       msgId:+new Date()+'',
       msgType:MsgTypeEnum.TEXT,
-      msg:`你好，我是小Q，遇到不懂的问题，可以尝试在输入框<span style='color:var(--im-primary)'>@小Q</span>，我会随时替你解答！`,
+      msg:`您好，我是小Q，遇到不懂的问题，可以尝试在输入框<span style='color:var(--im-primary)'>@小Q</span>，我会随时替你解答！`,
       user:{
         userId:'AQChatHelper_INIT',
         userAvatar:'https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/AQChatAI.png',
@@ -434,9 +480,9 @@ export default ()=>{
       roomId:result.roomId || '',
       roomNo:result.roomNo || '',
       roomName:result.roomName || '',
-      ai:result.ai || 0,
+      ai:result.ai || AiTypeEnum.CLOSE,
     })
-    if(result.ai === 1){
+    if(result.ai === AiTypeEnum.OPEN){
       initAiFun();
     }
   }
