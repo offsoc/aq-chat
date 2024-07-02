@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-04-20 18:16:54
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-06-30 14:00:46
+ * @LastEditTime: 2024-07-02 21:06:17
  * @Description: 首页
 -->
 <template>
@@ -80,15 +80,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref,h } from "vue";
+import { ref } from "vue";
 import LottieChat from "@/assets/json/lottie-chat.json";
 import LottieReload from "@/assets/json/lottie-reload.json";
 import LottieAni from "@/components/Lottie.vue";
 import useTyping from "./hook/useTyping";
 import useStart from "./hook/useStart";
 import useAppStore from "@/store/modules/app";
-import { ElNotification } from 'element-plus'
-import CnNotify from "@/components/CnNotify.vue";
 
 const appStore = useAppStore()
 const appDesc = ref("");
@@ -131,19 +129,8 @@ const toUrl = (row:any)=>{
   window.open(row.url,row.title)
 }
 
-const starTip = () => {
-  ElNotification({
-    title: '',
-    duration: 10000,
-    position: "top-right",
-    dangerouslyUseHTMLString: true,
-    message: h(CnNotify)
-  })
-}
-
 setTimeout(() => {
   startTyping("一个极速、便捷的在线匿名聊天室", appDesc);
-  starTip()
 }, 1000);
 
 </script>
