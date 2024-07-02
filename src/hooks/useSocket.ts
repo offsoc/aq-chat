@@ -2,7 +2,7 @@
  * @Author: howcode 1051495009@qq.com
  * @Date: 2024-05-02 12:00:36
  * @LastEditors: howcode 1051495009@qq.com
- * @LastEditTime: 2024-07-01 16:37:10
+ * @LastEditTime: 2024-07-02 15:38:36
  * @Description: websocket消息处理
  */
 import AQSender from '@/message/AQSender'
@@ -10,7 +10,7 @@ import AQMsgHandlerFactory from '@/message/msghandler/AQMsgHandlerFactory'
 import CallbackMethodManager from '@/message/CallbackMethodManager';
 import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import useAppStore from "@/store/modules/app"
-import { ElMessage,ElMessageBox,ElLoading } from 'element-plus'
+import { ElMessage,ElMessageBox } from 'element-plus'
 import { useRouter,useRoute } from 'vue-router'
 import ExceptionEnum from "@/enums/ExceptionEnum"
 import MsgStatusEnum from "@/enums/MsgStatusEnum"
@@ -18,6 +18,7 @@ import Msg from "../class/Msg"
 import MsgTypeEnum from "@/enums/MsgTypeEnum"
 import AiTypeEnum from "@/enums/AiTypeEnum"
 import { ref } from 'vue'
+import {AiWaitMsgInfo} from "@/utils/config"
 
 export default ()=>{
 
@@ -191,27 +192,61 @@ export default ()=>{
     }
   }
 
-  // ai消息回调
+  // AI图片、音频消息回调
   const aiReplyMsg =  (result:any)=>{
-    console.log("ai消息回调",result.msg);
-    let currentMsg = appStore.msgList.find(x=>x.msgId === result.msgId);
+    let currentMsg = appStore.msgList.find(x=>x.msgId === AiWaitMsgInfo.msgId);
     if(currentMsg){
-      currentMsg.msg += result.msg
+      currentMsg.msgType = result.msgType;
+      currentMsg.msg = result.msg
+      currentMsg.msgId = result.msgId
       appStore.setAiCode(+new Date()+'')
-    }else{
-      const msg:Msg = {
-        user:{
-          userId:result.userId,
-          userAvatar:result.userAvatar,
-          userName:result.userName,
-        },
-        roomId:result.roomId,
-        msgType:result.msgType,
-        msg:result.msg,
-        msgId:result.msgId
+      appStore.setEditorDisabled(false)
+    }
+  }
+  // AI文本消息回调
+  const streamMsgNotifyFun = (result:any) =>{
+    if(appStore.roomInfo.ai == AiTypeEnum.AIZOOM){
+      let currentMsg = appStore.msgList.find(x=>x.msgId === AiWaitMsgInfo.msgId);
+      if(currentMsg){
+        if(currentMsg.msg === AiWaitMsgInfo.msg){
+          currentMsg.msgType = MsgTypeEnum.TEXT;
+          currentMsg.msg = result.msg
+          currentMsg.msgId = result.msgId
+        }else{
+          currentMsg.msg += result.msg
+          appStore.setAiCode(+new Date()+'')
+        }
+      }else{
+        currentMsg = appStore.msgList.find(x=>x.msgId === result.msgId);
+        if(!currentMsg) return
+        currentMsg.msg += result.msg
+        appStore.setAiCode(+new Date()+'')
       }
-      appStore.sendInfoLocalFun(msg)
-      appStore.setMsgId(result.msgId)
+      if(result.streamType == 0){
+        appStore.setEditorDisabled(true)
+      }else{
+        appStore.setEditorDisabled(false)
+      }
+    }else{
+      let currentMsg = appStore.msgList.find(x=>x.msgId === result.msgId);
+      if(currentMsg){
+        currentMsg.msg += result.msg
+        appStore.setAiCode(+new Date()+'')
+      }else{
+        const msg:Msg = {
+          user:{
+            userId:result.userId,
+            userAvatar:result.userAvatar,
+            userName:result.userName,
+          },
+          roomId:result.roomId,
+          msgType:MsgTypeEnum.TEXT,
+          msg:result.msg,
+          msgId:result.msgId
+        }
+        appStore.sendInfoLocalFun(msg)
+        appStore.setMsgId(result.msgId)
+      }
     }
   }
 
@@ -256,28 +291,7 @@ export default ()=>{
       appStore.resetAllInfo();
     })
   }
-  // ai流消息
-  const streamMsgNotifyFun = (result:any) =>{
-    let currentMsg = appStore.msgList.find(x=>x.msgId === result.msgId);
-    if(currentMsg){
-      currentMsg.msg += result.msg
-      appStore.setAiCode(+new Date()+'')
-    }else{
-      const msg:Msg = {
-        user:{
-          userId:result.userId,
-          userAvatar:result.userAvatar,
-          userName:result.userName,
-        },
-        roomId:result.roomId,
-        msgType:MsgTypeEnum.TEXT,
-        msg:result.msg,
-        msgId:result.msgId
-      }
-      appStore.sendInfoLocalFun(msg)
-      appStore.setMsgId(result.msgId)
-    }
-  }
+  
   // 消息撤回
   const recallMsgFun = (result:any) =>{
     console.log("消息撤回",result);
@@ -378,7 +392,7 @@ export default ()=>{
   }
   // 消息发送状态修改
   const sendMsgStatusFun = (result:any) =>{
-    console.log("消息发送状态修改",result);
+    // console.log("消息发送状态修改",result);
     for(let i = appStore.msgList.length-1;i>=0;i--){
       if(appStore.msgList[i].msgId == result.msgId){
         appStore.msgList[i].msgStatus = MsgStatusEnum.FULFILLED;

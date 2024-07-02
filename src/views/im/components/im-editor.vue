@@ -5,9 +5,9 @@
     </div>
     <el-tooltip :visible="showPopover" placement="bottom">
       <template #content>
-        <span> 不能发送空白消息 </span>
+        <span> {{ msgTip }} </span>
       </template>
-      <el-button type="primary" class="send-btn" title="按enter键发送，按ctrl+enter键换行"
+      <el-button type="primary" :disabled="appStore.editorDisabled" class="send-btn" title="按enter键发送，按ctrl+enter键换行"
           @click="sendVerify">发送(S)</el-button>
     </el-tooltip>
   </div>
@@ -21,6 +21,7 @@ import MsgTypeEnum from "@/enums/MsgTypeEnum"
 import useAppStore from "@/store/modules/app"
 import User from '@/class/User'
 import AiTypeEnum from '@/enums/AiTypeEnum'
+import { ElMessage } from 'element-plus'
 
 const chat = ref();
 const appStore = useAppStore()
@@ -49,6 +50,7 @@ const initChat = () => {
   // 绑定键盘发送事件（默认配置为回车发送）
   chat.value.enterSend = sendVerify
 }
+const msgTip = ref('')
 
 const initUserList = ()=>{
   let list = memberList.map(x=>{
@@ -75,8 +77,13 @@ const svgToDataURL = (html:any)=> {
 // 发送校验
 const sendVerify = ()=> {
   if (!chat.value) return
+  if(appStore.editorDisabled){
+    ElMessage.warning("正在生成中..")
+    return
+  }
   if(chat.value.isEmpty(true)){
     showPopover.value = true;
+    msgTip.value = '不能发送空白消息'
     setTimeout(() => {
       showPopover.value = false;
     }, 1000);
@@ -86,14 +93,14 @@ const sendVerify = ()=> {
   if(!sendContent) return
   // 获取聊天框中@人员
   const callUserList = chat.value.getCallUserList()
-    let extArray = callUserList.map((x:any)=>x.userId);
-    extArray = extArray.map((element:string) => "@"+element);
-    let ext = extArray.join(',');
-    // 获取聊天框text内容，使用&拼接，用于给ai分析纯文本内容
-    const textMsg = chat.value.getText()
-    ext+=`&${textMsg}`
-    appStore.setForceBottom(+new Date())
-    appStore.sendInfo(sendContent,MsgTypeEnum.TEXT,ext);
+  let extArray = callUserList.map((x:any)=>x.userId);
+  extArray = extArray.map((element:string) => "@"+element);
+  let ext = extArray.join(',');
+  // 获取聊天框text内容，使用&拼接，用于给ai分析纯文本内容
+  const textMsg = chat.value.getText()
+  ext+=`&${textMsg}`
+  appStore.setForceBottom(+new Date())
+  appStore.sendInfo(sendContent,MsgTypeEnum.TEXT,ext,callUserList);
   // 清空聊天框
   chat.value.clear()
 }
@@ -105,6 +112,14 @@ watch(() => appStore.memberList, (newV:any) => {
     initUserList();
   }
 }, { immediate:true,deep: true })
+
+// watch(() => appStore.editorDisabled, (newV:any) => {
+//   if(newV){
+//     chat.value.disabled()
+//   }else{
+//     chat.value.enable()
+//   }
+// },)
 
 onMounted(() => {
   initChat()

@@ -13,6 +13,7 @@ import * as AQChatMSg from '@/message/protocol/AQChatMsgProtocol_pb'
 import CustomSnowflake from "@/utils/CustomSnowflake"
 import MsgTypeEnum from "@/enums/MsgTypeEnum"
 import AiTypeEnum from "@/enums/AiTypeEnum"
+import { AssistantsList,AiWaitMsgInfo } from "@/utils/config"
 
 interface RoomInfo {
     roomId:string,
@@ -46,6 +47,8 @@ interface AppState {
     aiCode:number|string,
     // 强制触底标识
     forceBottom:number|string,
+    // 输入框是否允许输入
+    editorDisabled:boolean
 }
 
 const customSnowflake = new CustomSnowflake();
@@ -73,7 +76,8 @@ const useAppStore = defineStore('app', {
         soundDom:null,
         otherUserMsgId:'',
         aiCode:'',
-        forceBottom:''
+        forceBottom:'',
+        editorDisabled:false
     }),
     getters: {},
     actions: {
@@ -98,7 +102,7 @@ const useAppStore = defineStore('app', {
         setWebsocketStatus(status:boolean) {
             this.websocketStatus = status
         },
-        sendInfo(msg:string,msgType:MsgTypeEnum,ext:undefined){
+        sendInfo(msg:string,msgType:MsgTypeEnum,ext:undefined,callUserList:User[]){
             const msgId = customSnowflake.nextId();
             const msgInfo:Msg = {
                 user:{
@@ -115,6 +119,28 @@ const useAppStore = defineStore('app', {
             }
             this.sendInfoLocalFun(msgInfo)
             this.sendInfoNetWorkFun(msgInfo)
+            if(this.roomInfo.ai === AiTypeEnum.AIZOOM){
+              let aiAssistant = null
+              if(callUserList.length == 1){
+                aiAssistant = callUserList[0]
+              }else{
+                aiAssistant = AssistantsList[1]
+              }
+              const msgId = AiWaitMsgInfo.msgId;
+              const tempMsg:Msg = {
+                msgId:msgId,
+                msg:AiWaitMsgInfo.msg,
+                msgType:MsgTypeEnum.WAIT,
+                roomId:this.roomInfo.roomId,
+                user:{
+                  userId:AiWaitMsgInfo.userId,
+                  userAvatar:aiAssistant.userAvatar,
+                  userName:aiAssistant.userName,
+                }
+              }
+              this.editorDisabled = true;
+              this.sendInfoLocalFun(tempMsg)
+            }
         },
         sendInfoLocalFun(msg:Msg){
             this.msgList.push(msg)
@@ -178,6 +204,7 @@ const useAppStore = defineStore('app', {
                 userAvatar:''
             }
             this.msgList = []
+            this.editorDisabled = false;
         },
         resetRoomInfo(){
             this.roomInfo = {
@@ -206,7 +233,10 @@ const useAppStore = defineStore('app', {
         // 设置消息状态
         setMsgStatus(index:number,status:MsgStatusEnum){
             this.msgList[index].msgStatus = status;
-        }
+        },
+        setEditorDisabled(status:boolean){
+            this.editorDisabled = status;
+        },
     },
     persist: {
         paths:['theme','userInfo','roomInfo']
