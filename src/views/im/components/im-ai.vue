@@ -30,19 +30,19 @@
                   <div v-else-if="item.msgStatus === MsgStatusEnum.REJECTED" class="msg-failed" @click="reSendMsgFun(item,index)">!</div>
                   <div class="info-box">
                     <div class="user-name text-ellipsis">{{ item.user.userName }}</div>
-                    <div @contextmenu="onContextMenu($event,item)" v-if="item.msgType === MsgTypeEnum.TEXT" class="text-block" v-html="item.msg"></div>
-                    <img @contextmenu="onContextMenu($event,item)" v-else-if="item.msgType === MsgTypeEnum.IMAGE" class="send-image" v-bind:src="item.msg"
+                    <div v-if="item.msgType === MsgTypeEnum.TEXT" class="text-block" v-html="item.msg"></div>
+                    <img v-else-if="item.msgType === MsgTypeEnum.IMAGE" class="send-image" v-bind:src="item.msg"
                       @click="privewImage(item.msg)" preview="1" />
-                    <video @contextmenu="onContextMenu($event,item)" v-else-if="item.msgType === MsgTypeEnum.VIDEO" class="send-video" width="320" height="240"
+                    <video v-else-if="item.msgType === MsgTypeEnum.VIDEO" class="send-video" width="320" height="240"
                       controls>
                       <source :src="item.msg" type="video/mp4" />
                       您的浏览器不支持 HTML5 video 标签。
                     </video>
-                    <audio @contextmenu="onContextMenu($event,item)" class="send-video" v-else-if="item.msgType === MsgTypeEnum.VOICE" controls>
+                    <audio class="send-video" v-else-if="item.msgType === MsgTypeEnum.VOICE" controls>
                       <source :src="item.msg" type="audio/mpeg" />
                       您的浏览器不支持该音频格式。
                     </audio>
-                    <div @contextmenu="onContextMenu($event,item)" v-else-if="item.msgType === MsgTypeEnum.FILE" class="file-card">
+                    <div v-else-if="item.msgType === MsgTypeEnum.FILE" class="file-card">
                       <div class="file-top">
                         <div class="info nowrap-2">
                           {{ item.ext }}
@@ -62,7 +62,11 @@
                   </div>
                   <div class="info-box">
                     <div class="user-name text-ellipsis">{{ item.user.userName }}</div>
-                    <div v-if="item.msgType === MsgTypeEnum.TEXT" class="text-block md-block">
+                    <div v-if="item.msgType === MsgTypeEnum.WAIT" class="text-block text-wait">
+                      <lottie-ani class="icon-loading" :src="lottieLoading" />
+                      <div>{{AiWaitMsgInfo.msg}}</div>
+                    </div>
+                    <div v-else-if="item.msgType === MsgTypeEnum.TEXT" class="text-block md-block">
                       <Markdown :source="item.msg" />
                       <div v-if="item.user?.userId != 'AQChatHelper_INIT'" class="ai-btn">
                         <div class="copy" v-copy="item.msg">
@@ -112,13 +116,6 @@
         <im-chat ref="imCharRef"></im-chat>
       </div>
       <im-number/>
-      <context-menu
-        v-model:show="showMenu"
-        :options="optionsComponent"
-      >
-        <context-menu-item v-if="currentMsg.msgType === MsgTypeEnum.FILE" label="下载" @click="downloadFileFun(currentMsg.msg, currentMsg.ext)" />
-        <context-menu-item label="撤回" @click="recallMsgFun" />
-      </context-menu>
     </div>
   </div>
 </template>
@@ -138,6 +135,8 @@ import Msg from '@/class/Msg'
 import Markdown from 'vue3-markdown-it';
 import LottieAni from "@/components/Lottie.vue";
 import lottieAi from "@/assets/json/lottie-ai.json";
+import lottieLoading from "@/assets/json/lottie-loading.json";
+import { AssistantsList,AiWaitMsgInfo } from "@/utils/config"
 
 const appStore = useAppStore()
 const { proxy }: any = getCurrentInstance();
@@ -158,7 +157,6 @@ const watchObject = new IntersectionObserver((entries)=>{
     newMsgCount.value = 0;
   }
 },{root:null,threshold:0})
-const showMenu = ref(false);
 // 菜单配置
 const optionsComponent =  ref({
   zIndex: 3,
@@ -168,28 +166,7 @@ const optionsComponent =  ref({
 })
 const currentMsg = ref()
 const imCharRef = ref()
-const aiInfoList = [
-  {
-    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/AQChatAI.png",
-    userName:'小Q',
-    desc:'您好，我是小Q，@我，可以根据您的文本回答问题'
-  },
-  {
-    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xt.png",
-    userName:'小T',
-    desc:'您好，我是小T，无需@我就可和我随时发起多轮对话'
-  },
-  {
-    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xv.png",
-    userName:'小V',
-    desc:'您好，我是小V，@我，可以根据您的文本生成真人语音'
-  },
-  {
-    userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xm.png",
-    userName:'小M',
-    desc:'您好，我是小M，@我，可以帮助您的文本生成图片（使用英语描述更佳）'
-  }
-]
+const aiInfoList = AssistantsList
 
 // 监听websocket状态
 watch(() => appStore.websocketStatus, (newV) => {
@@ -236,16 +213,6 @@ const handleCopy = (text: string) => {
 // 重新编辑
 const rewriteFun =(ext:any)=>{
   imCharRef.value && imCharRef.value.rewriteFun(ext)
-}
-
-// 右键菜单
-const onContextMenu = (e : MouseEvent,msg:any) =>{
-  e.preventDefault();
-  //显示组件菜单
-  showMenu.value = true;
-  optionsComponent.value.x = e.x;
-  optionsComponent.value.y = e.y;
-  currentMsg.value = msg;
 }
 
 // 撤回消息
@@ -691,6 +658,14 @@ const toBottom = () => {
                   }
                 }
               }
+              .text-wait{
+                display: flex;
+                align-items: center;
+                color: #333;
+                div{
+                  white-space: nowrap;
+                }
+              }
             }
           }
         }
@@ -698,6 +673,9 @@ const toBottom = () => {
 
       }
     }
+  }
+  .icon-loading{
+    height: 80px!important;
   }
 }
 /deep/.emo-image {
