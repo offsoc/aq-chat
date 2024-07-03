@@ -16,7 +16,7 @@ export const AssistantsList  = [
   {
     userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xt.png",
     userName:'小T',
-    desc:'您好，我是小T，无需@我就可和我随时发起多轮对话'
+    desc:'您好，我是小T，无需@我，可直接发送问题和我发起多轮对话'
   },
   {
     userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xv.png",
@@ -26,7 +26,7 @@ export const AssistantsList  = [
   {
     userAvatar:"https://aqchat.oss-cn-shenzhen.aliyuncs.com/avatar/xm.png",
     userName:'小M',
-    desc:'您好，我是小M，@我，可以帮助您的文本生成图片（使用英语描述更佳）'
+    desc:'您好，我是小M，@我，可以帮助您的文本生成图片'
   }
 ]
 
